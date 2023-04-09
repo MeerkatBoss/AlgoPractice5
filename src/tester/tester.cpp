@@ -36,7 +36,7 @@ void run_all_tests()
     // printf("seed = %u\n", seed);
 
     test_data tdata = { .data = NULL, .data_size = 0 };
-    tdata.data = (uint32_t*) calloc(1'000'000, sizeof(*tdata.data));
+    tdata.data = (uint32_t*) calloc(10'000'000, sizeof(*tdata.data));
 
     FILE* output_insert = fopen("results/" STR(TEST_CASE_NAME) "_insert.csv",
                                                                         "w+");
