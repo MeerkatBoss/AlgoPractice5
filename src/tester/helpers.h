@@ -68,8 +68,8 @@ do {                                                                           \
         uint64_t time_insert = 0;                                              \
         uint64_t time_erase = 0;                                               \
         REPEAT_TEST(tree, repetitions, tdata, filler, time_insert, time_erase);\
-        fprintf(output_insert, STR(tree)"%zu,%lu\n", sample_size, time_insert);\
-        fprintf(output_erase,  STR(tree)"%zu,%lu\n", sample_size, time_erase); \
+        fprintf(output_insert, STR(tree)",%zu,%lu\n", sample_size, time_insert);\
+        fprintf(output_erase,  STR(tree)",%zu,%lu\n", sample_size, time_erase); \
         if (time_insert + time_erase >= 60*1000) break;                        \
     }                                                                          \
 } while(0)
