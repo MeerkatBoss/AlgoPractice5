@@ -1,10 +1,18 @@
+#include "trees/binary_tree.h"
+#include "trees/avl_tree.h"
+#include "trees/splay_tree.h"
+#include "trees/treap.h"
+#include "trees/skip_list.h"
+
 #include "tester.h"
 #include "helpers.h"
 
 static void fill_random(test_data* tdata);
 static void fill_sorted(test_data* tdata);
 #define CAT(x, y) __CAT(x, y)
-#define __CAT(x, y) x##y
+#define __CAT(x, y, ...) x##y
+#define STR(x) __STR(x)
+#define __STR(x) #x
 
 void run_all_tests()
 {
@@ -14,18 +22,21 @@ void run_all_tests()
 #define REPEAT(val)       size_t repetitions = val;
 #define FILL_TYPE(func)   filler_t *filler = func;
 
-#define TEST_TREES(trees) CAT(TEST_TREE_A trees, _END)
+#define TEST_TREES(trees) CAT(TEST_TREE_A trees, _END) 
 #define TEST_TREE_A(tree) \
-    RUN_TEST(output_insert, output_erase, tdata, filler, seed); TEST_TREE_B
-#define TEST_TREE_A(tree) \
-    RUN_TEST(output_insert, output_erase, tdata, filler, seed); TEST_TREE_A
+    RUN_TEST(output_insert, output_erase, tree, tdata, filler, seed);\
+    TEST_TREE_B
+#define TEST_TREE_B(tree) \
+    RUN_TEST(output_insert, output_erase, tree, tdata, filler, seed);\
+    TEST_TREE_A
 #define TEST_TREE_A_END
 #define TEST_TREE_B_END
 
     unsigned seed = (unsigned) time(NULL);
+    // printf("seed = %u\n", seed);
 
-    test_data tdata = { .data = NULL, data_size = 0 };
-    tdata.data = (uint32_t*) calloc(end_size + step_size, sizeof(*tdata.data));
+    test_data tdata = { .data = NULL, .data_size = 0 };
+    tdata.data = (uint32_t*) calloc(1'000'000, sizeof(*tdata.data));
 
     FILE* output_insert = fopen("results/" STR(TEST_CASE_NAME) "_insert.csv",
                                                                         "w+");
@@ -52,11 +63,11 @@ void run_all_tests()
 static void fill_random(test_data* tdata)
 {
     for (size_t i = 0; i < tdata->data_size; ++i)
-        data[i] = rand();
+        tdata->data[i] = (uint32_t)rand();
 }
 
 static void fill_sorted(test_data* tdata)
 {
-    for (size_t i = 0; i < tdata->data_size; ++i);
-        data[i] = i + 1;
+    for (size_t i = 0; i < tdata->data_size; ++i)
+        tdata->data[i] = (uint32_t)(i + 1);
 }

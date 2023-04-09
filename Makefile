@@ -21,12 +21,13 @@ CFLAGS=-D _DEBUG -ggdb3 -std=c++2a -O0 -Wall -Wextra -Weffc++\
 -pie -Wlarger-than=8192 -Wstack-usage=8192
 
 BUILDTYPE?=Debug
+TEST_CASE?=trees_demo
 
 ifeq ($(BUILDTYPE), Release)
 	CFLAGS=-std=c++2a -O3 -Wall
 endif
 
-PROJECT	:= project
+PROJECT	:= tree_practice
 VERSION := 0.0.1
 
 SRCDIR	:= src
@@ -38,7 +39,6 @@ INCDIR	:= include
 SRCEXT	:= cpp
 HEADEXT	:= h
 OBJEXT	:= o
-
 
 SOURCES := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 LIBS	:= $(patsubst lib%.a, %, $(shell find $(LIBDIR) -type f))
@@ -68,7 +68,12 @@ build_lib: $(OBJECTS)
 	@rm -r dist/include
 	@rm -r dist/lib
 
+.FORCE:
 
+$(OBJDIR)/tester/tester.o: $(SRCDIR)/tester/tester.cpp .FORCE
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCFLAGS) -DTEST_CASE="test_cases/$(TEST_CASE).h" \
+		-DTEST_CASE_NAME=$(TEST_CASE) -c $< -o $@
 
 $(OBJDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
@@ -87,5 +92,5 @@ cleaner: clean
 run: $(BINDIR)/$(PROJECT)
 	$(BINDIR)/$(PROJECT) $(ARGS)
 
-.PHONY: all remake clean cleaner
+.PHONY: all remake clean cleaner .FORCE
 
