@@ -32,7 +32,8 @@ void run_all_tests()
 #define TEST_TREE_A_END
 #define TEST_TREE_B_END
 
-    unsigned seed = (unsigned) time(NULL);
+    // unsigned seed = (unsigned) time(NULL);
+    unsigned seed = 0;
     // printf("seed = %u\n", seed);
 
     test_data tdata = { .data = NULL, .data_size = 0 };
